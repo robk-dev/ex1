@@ -1,0 +1,24 @@
+{
+  "name": "motorway",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "npm run build && node ./bin/index"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.2.0",
+    "axios": "^0.20.0",
+    "tslib": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/async": "^3.2.3",
+    "@types/node": "^14.10.2",
+    "typescript": "^4.0.2"
+  }
+}
