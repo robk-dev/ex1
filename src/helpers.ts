@@ -34,7 +34,7 @@ export const request = async (url: string) => {
         }
         attempt++;
     }
-    throw new Error(`Failed to get data after ${attempt + 1} attempts`);
+    throw new Error(`Failed to get data after ${attempt} attempts`);
 }
 
 // not in use; cant adjust for dynamic pages/number of entries being added

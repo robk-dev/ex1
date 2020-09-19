@@ -1,8 +1,8 @@
 import * as async from 'async';
-import { request } from './helpers'
+import { request } from './helpers';
 
 const fs = require('fs');
-const util = require('util')
+const util = require('util');
 const writeFile = util.promisify(fs.writeFile);
 
 interface Visit {
@@ -11,22 +11,21 @@ interface Visit {
     date: Date;
 }
 
-const url = process.env.url;
+const url = process.env.url as string;
 
 const getToken = async (): Promise<{ token: string }> => {
     try {
-        const { data } = await request( url + '/login');
+        const { data } = await request(url + '/login');
         return data;
     } catch (error) {
         console.error({ msg: 'error getting token', error });
         throw error;
     }
-
 }
 
 const getData = async (page: string | number, token: string): Promise<{ total: number, data: Visit[] }> => {
     try {
-        const { data } = await request(url + `/api/visits?page=${page}&token=${token}`);
+        const { data } = await request(url + `/visits?page=${page}&token=${token}`);
         return data;
     } catch (error) {
         console.error({ msg: 'error getting data', error });
@@ -83,7 +82,7 @@ const countVisits = (visits: Visit[]) => {
 }
 
 // queue sends all requests synchronously up to parallelism limit and can add more tasks when total increases
-const queue = async (token: string, parallelism = 5): Promise<Visit[]> => {
+const queue = (token: string, parallelism = 5): Promise<Visit[]> => {
     let data: any[] = [];
     let total = 0;
     let resources_per_page: number; // 15 - just an observation, not from requirements
