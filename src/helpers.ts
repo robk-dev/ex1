@@ -9,7 +9,7 @@ const getExponentialRetryTime = (attempt: number, max_wait_time_ms: number) => {
     return Math.min(Math.pow(2, attempt) + Math.floor(Math.random() * 1000), max_wait_time_ms);
 };
 
-const wait = async (wait_time_ms: number) => {
+const wait = (wait_time_ms: number) => {
     return new Promise(resolve => setTimeout(() => resolve(), wait_time_ms));
 }
 
@@ -34,23 +34,23 @@ export const request = async (url: string) => {
         }
         attempt++;
     }
-    throw new Error(`Failed to get data after ${attempt} attempts`);
+    throw new Error(`Failed to get data after ${attempt - 1} attempts`);
 }
 
 // not in use; cant adjust for dynamic pages/number of entries being added
-// export const get_in_parallel = async (token: string, getData: Function) => {
-//     let data: any[] = [];
-//     let { total } = await getData(0, token);
-//     const resources_per_page = 15; // just an observation, not from requirements
+export const get_in_parallel = async (token: string, getData: Function) => {
+    let data: any[] = [];
+    let { total } = await getData(0, token);
+    const resources_per_page = 15; // just an observation, not from requirements
 
-//     const pages = Math.ceil(total / resources_per_page) || 1;
+    const pages = Math.ceil(total / resources_per_page) || 1;
 
-//     await Promise.all(new Array(pages).fill(undefined)
-//         .map(async (_val, i) => {
-//             const { data: batch } = await getData(i + 1, token);
+    await Promise.all(new Array(pages).fill(undefined)
+        .map(async (_val, i) => {
+            const { data: batch } = await getData(i + 1, token);
 
-//             data = data.concat(batch); // so we dont have to reduce array of arrays later
-//             return i;
-//         }));
-//     return data;
-// }
+            data = data.concat(batch); // so we dont have to reduce array of arrays later
+            return i;
+        }));
+    return data;
+}
