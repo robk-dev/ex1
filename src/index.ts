@@ -81,8 +81,8 @@ const countVisits = (visits: Visit[]) => {
     });
 }
 
-// queue sends all requests synchronously up to parallelism limit and can add more tasks when total increases
-const queue = (token: string, parallelism = 5): Promise<Visit[]> => {
+// queue sends all requests synchronously up to concurrency limit and can add more tasks when total increases
+const queue = (token: string, concurrency = 5): Promise<Visit[]> => {
     let data: any[] = [];
     let total = 0;
     let resources_per_page: number; // 15 - just an observation, not from requirements
@@ -112,7 +112,7 @@ const queue = (token: string, parallelism = 5): Promise<Visit[]> => {
             }
         }
         next();
-    }, parallelism);
+    }, concurrency);
 
     return new Promise(resolve => {
         q.drain(() => {
